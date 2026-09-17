@@ -30,8 +30,6 @@ const AppState = {
 let searchDebounceTimer = null;
 let searchAbortController = null;
 
-init();
-
 function init() {
   applyTheme(AppState.theme);
   applyReducedMotion(AppState.reducedMotion);
@@ -261,3 +259,8 @@ function wireAnnouncer() {
     region.textContent = event.detail;
   });
 }
+
+// Called last, once every function and const above it exists — `init` reads
+// `systemThemeQuery` (via applyTheme) before that const's own line runs
+// otherwise, which throws in a module's strict temporal-dead-zone scoping.
+init();
