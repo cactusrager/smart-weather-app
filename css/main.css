@@ -1,0 +1,276 @@
+/* Self-hosted Inter, so we never make a request to a third-party font CDN. */
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  background-color: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-header .brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text);
+}
+
+.app-header .brand-icon {
+  color: var(--color-primary);
+}
+
+.location-display {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Location consent card ---------- */
+.consent-card {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+/* ---------- Search ---------- */
+.search-results {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  box-shadow: var(--color-card-shadow);
+  max-height: 16rem;
+  overflow-y: auto;
+  z-index: 1050;
+}
+
+.search-result-item {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  color: var(--color-text);
+}
+
+.search-result-item:hover,
+.search-result-item:focus-visible {
+  background-color: var(--color-bg);
+}
+
+/* ---------- Hero / current conditions ---------- */
+.current-hero {
+  background: var(--color-bg-hero);
+  border-radius: 1rem;
+  /* Driven by the current condition/isDay, not the site theme — see themes.css. */
+  color: var(--hero-fg);
+  text-shadow: var(--hero-fg-shadow);
+  transition: background 0.6s ease;
+}
+
+.current-temp {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.current-condition-icon {
+  font-size: 3rem;
+}
+
+/* ---------- Cards ---------- */
+.info-card {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--color-card-shadow);
+  height: 100%;
+}
+
+.info-card .card-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.recommendation-item {
+  border-bottom: 1px solid var(--color-border);
+  padding-block: 0.6rem;
+}
+
+.recommendation-item:last-child {
+  border-bottom: none;
+}
+
+.recommendation-empty {
+  color: var(--color-text-muted);
+}
+
+.recommendation-icon.severity-low { color: var(--color-success); }
+.recommendation-icon.severity-moderate { color: var(--color-warning); }
+.recommendation-icon.severity-high,
+.recommendation-icon.severity-extreme { color: var(--color-danger); }
+
+/* ---------- Hourly timeline ---------- */
+.hourly-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-block: 0.25rem 0.75rem;
+  scroll-snap-type: x proximity;
+}
+
+.hourly-item {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: 4.5rem;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.hourly-item .hourly-time {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.hourly-item .hourly-temp {
+  font-weight: 600;
+}
+
+/* ---------- Daily forecast ---------- */
+.daily-row {
+  display: grid;
+  grid-template-columns: 5.5rem 2rem 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.daily-row:last-child {
+  border-bottom: none;
+}
+
+.daily-bar-track {
+  background-color: var(--color-border);
+  border-radius: 999px;
+  height: 0.35rem;
+  overflow: hidden;
+}
+
+.daily-bar-fill {
+  background-color: var(--color-primary);
+  height: 100%;
+  border-radius: 999px;
+}
+
+/* ---------- Best window callout ---------- */
+.best-window-callout {
+  background-color: var(--color-bg-elevated);
+  border: 1px dashed var(--color-primary);
+  border-radius: 0.75rem;
+}
+
+/* ---------- Footer ---------- */
+.app-footer {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.app-footer a {
+  color: var(--color-text-muted);
+  text-decoration: underline;
+}
+
+/* ---------- Focus visibility (WCAG) ---------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Reduced motion ---------- */
+[data-reduced-motion="true"] * ,
+[data-reduced-motion="true"] *::before,
+[data-reduced-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Loading / error states ---------- */
+.state-panel {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.visually-hidden-focusable-skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 2000;
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.visually-hidden-focusable-skip-link:focus {
+  left: 0;
+}
