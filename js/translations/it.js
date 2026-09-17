@@ -66,10 +66,34 @@ export default {
   sections: {
     howItFeels: "Come ci si sente",
     whatToWear: "Cosa indossare",
+    uvIndex: "Indice UV",
     beforeYouGo: "Prima di uscire",
     hourlyForecast: "Previsioni orarie",
     dailyForecast: "Previsioni a 7 giorni",
+    dailyForecastHint: "Tocca un giorno per vedere le previsioni orarie.",
     bestWindow: "Momento migliore per uscire oggi",
+  },
+
+  uvCategory: {
+    low: "Basso",
+    moderate: "Moderato",
+    high: "Alto",
+    very_high: "Molto alto",
+    extreme: "Estremo",
+  },
+
+  clothing: {
+    extreme_cold: "Copriti bene: cappotto pesante, cappello, guanti e sciarpa.",
+    cold: "Tempo da cappotto pesante.",
+    cool: "Una giacca è una buona idea.",
+    mild_cool: "Un maglione o una giacca leggera vanno bene.",
+    mild: "Le maniche lunghe sono comode.",
+    warm: "Tempo da maglietta.",
+    hot: "Tempo da maglietta e pantaloncini.",
+    extras: {
+      umbrella: "Più tardi è probabile la pioggia: porta un ombrello.",
+      sunglasses: "L'indice UV è alto: occhiali da sole consigliati.",
+    },
   },
 
   recommendation: {
@@ -79,27 +103,34 @@ export default {
       high: "Sono previste piogge intense verso le {time} ({probability}% di probabilità). Prevedi condizioni di bagnato e possibili ritardi.",
     },
     uv: {
+      low: "Indice UV basso oggi ({uvIndex}). Non serve una protezione solare particolare.",
       moderate: "Indice UV moderato oggi ({uvIndex}). La crema solare è consigliata se resti a lungo all'aperto.",
       high: "Indice UV alto oggi ({uvIndex}). Usa crema solare, occhiali da sole e un cappello se esci.",
       very_high: "Indice UV molto alto oggi ({uvIndex}). Evita il sole di mezzogiorno e proteggiti bene.",
       extreme: "Indice UV estremo oggi ({uvIndex}). Evita il sole diretto nelle ore di punta; la protezione solare è essenziale.",
     },
-    wind_chill: {
-      low: "Il vento fa sentire più freddo rispetto alla temperatura dell'aria. Una giacca leggera dovrebbe bastare.",
-      moderate: "Il vento fa percepire i {temperature} molto più freddi. Vestiti a strati.",
-      high: "Forte effetto del vento freddo. Copri la pelle esposta e vestiti a strati caldi e antivento.",
+    cold: {
+      moderate: "Ci sono {temperature} e sembra freddo. Una giacca calda è una buona idea.",
+      high: "Ci sono {temperature} — fa davvero freddo. Vestiti a strati caldi prima di uscire.",
+      extreme: "Ci sono {temperature} — freddo pericoloso. Copri la pelle esposta e limita il tempo all'aperto, se possibile.",
+      windNote: " Il vento fa sembrare la temperatura ancora più fredda.",
     },
-    heat_hydration: {
-      low: "Fa caldo fuori. Porta con te dell'acqua se stai fuori per un po'.",
-      moderate: "Oggi fa piuttosto caldo. Bevi a sufficienza e fai pause all'ombra, se possibile.",
-      high: "Temperature molto elevate oggi. Bevi acqua regolarmente, evita sforzi intensi all'aperto e resta all'ombra.",
+    heat: {
+      low: "Ci sono {temperature}. Porta con te dell'acqua se stai fuori per un po'.",
+      moderate: "Ci sono {temperature} — piuttosto caldo. Bevi a sufficienza e fai pause all'ombra, se possibile.",
+      high: "Ci sono {temperature} — molto caldo. Bevi acqua regolarmente, evita sforzi intensi all'aperto e resta all'ombra.",
+      extreme: "Ci sono {temperature} — caldo pericoloso. Evita attività all'aperto nelle ore di punta e mantieniti idratato.",
     },
     bestWindow: "Verso le {time} sembra il momento più piacevole per uscire oggi.",
     empty: {
-      feelsLike: "Niente di particolare: le condizioni al momento sembrano nella norma.",
-      wear: "Al momento non serve una protezione solare particolare.",
+      feelsLike: "Una piacevole {temperature} in questo momento: niente di particolare da preparare.",
       beforeYouGo: "Non è prevista pioggia e non ci sono indicazioni particolari per uscire oggi.",
     },
+  },
+
+  daily: {
+    showHourly: "Mostra le previsioni orarie per {day}",
+    hideHourly: "Nascondi le previsioni orarie per {day}",
   },
 
   units: {

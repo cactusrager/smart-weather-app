@@ -68,10 +68,38 @@ export default {
   sections: {
     howItFeels: "How It Feels",
     whatToWear: "What to Wear",
+    uvIndex: "UV Index",
     beforeYouGo: "Before You Go",
     hourlyForecast: "Hourly forecast",
     dailyForecast: "7-day forecast",
+    dailyForecastHint: "Tap a day to see its hourly forecast.",
     bestWindow: "Best time to go outside today",
+  },
+
+  // Short labels for the UV gauge — separate from the fuller sentence in
+  // recommendation.uv.* below.
+  uvCategory: {
+    low: "Low",
+    moderate: "Moderate",
+    high: "High",
+    very_high: "Very High",
+    extreme: "Extreme",
+  },
+
+  // Pictogram + one-line label for the What to Wear card. Always shown, one
+  // tier per "feels like" temperature band — see js/recommendations.js.
+  clothing: {
+    extreme_cold: "Bundle up: heavy coat, hat, gloves & scarf.",
+    cold: "Warm coat weather.",
+    cool: "A jacket is a good idea.",
+    mild_cool: "A sweater or light jacket works well.",
+    mild: "Long sleeves are comfortable.",
+    warm: "T-shirt weather.",
+    hot: "T-shirt and shorts weather.",
+    extras: {
+      umbrella: "Rain's likely later — bring an umbrella.",
+      sunglasses: "UV is high — sunglasses recommended.",
+    },
   },
 
   recommendation: {
@@ -81,27 +109,35 @@ export default {
       high: "Heavy rain expected around {time} ({probability}% chance). Plan for wet conditions and delays if possible.",
     },
     uv: {
+      low: "Low UV today (index {uvIndex}). No special sun protection needed.",
       moderate: "Moderate UV today (index {uvIndex}). Sunscreen is a good idea for extended time outside.",
       high: "High UV today (index {uvIndex}). Wear sunscreen, sunglasses, and a hat if you'll be outside.",
       very_high: "Very high UV today (index {uvIndex}). Seek shade during midday hours and use strong sun protection.",
       extreme: "Extreme UV today (index {uvIndex}). Avoid direct sun during peak hours; sun protection is essential.",
     },
-    wind_chill: {
-      low: "It feels cooler than the air temperature due to wind. A light jacket should help.",
-      moderate: "Wind is making {temperature} feel noticeably colder. Layer up before heading out.",
-      high: "Strong wind chill in effect. Cover exposed skin and dress in warm, windproof layers.",
+    // No "low" tier: below this, cold isn't worth flagging (see COLD_BANDS).
+    cold: {
+      moderate: "It's {temperature} and feels cold. A warm jacket is a good idea.",
+      high: "It's {temperature} — properly cold out. Bundle up in warm layers before heading outside.",
+      extreme: "It's {temperature} — dangerously cold. Cover exposed skin and limit time outside if you can.",
+      windNote: " The wind is making it feel even colder.",
     },
-    heat_hydration: {
-      low: "It's warm out. Keep some water with you if you'll be outside for a while.",
-      moderate: "It's quite hot today. Stay hydrated and take breaks in the shade if possible.",
-      high: "Very high temperatures today. Drink water regularly, avoid strenuous activity outdoors, and stay in the shade.",
+    heat: {
+      low: "It's {temperature}. Keep some water with you if you'll be outside for a while.",
+      moderate: "It's {temperature} — quite hot. Stay hydrated and take breaks in the shade if possible.",
+      high: "It's {temperature} — very hot. Drink water regularly, avoid strenuous activity outdoors, and stay in the shade.",
+      extreme: "It's {temperature} — dangerously hot. Avoid outdoor activity during peak hours and stay hydrated.",
     },
     bestWindow: "Around {time} looks like the most comfortable stretch to be outside today.",
     empty: {
-      feelsLike: "Nothing notable — conditions feel fairly typical right now.",
-      wear: "No special sun protection needed right now.",
+      feelsLike: "A comfortable {temperature} right now — nothing special to prepare for.",
       beforeYouGo: "No rain expected and no strong outdoor guidance for today.",
     },
+  },
+
+  daily: {
+    showHourly: "Show hourly forecast for {day}",
+    hideHourly: "Hide hourly forecast for {day}",
   },
 
   units: {

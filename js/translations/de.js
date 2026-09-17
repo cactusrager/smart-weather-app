@@ -66,10 +66,34 @@ export default {
   sections: {
     howItFeels: "Wie es sich anfühlt",
     whatToWear: "Was du anziehen solltest",
+    uvIndex: "UV-Index",
     beforeYouGo: "Bevor du losgehst",
     hourlyForecast: "Stündliche Vorhersage",
     dailyForecast: "7-Tage-Vorhersage",
+    dailyForecastHint: "Tippe auf einen Tag, um die stündliche Vorhersage zu sehen.",
     bestWindow: "Beste Zeit heute für draußen",
+  },
+
+  uvCategory: {
+    low: "Niedrig",
+    moderate: "Moderat",
+    high: "Hoch",
+    very_high: "Sehr hoch",
+    extreme: "Extrem",
+  },
+
+  clothing: {
+    extreme_cold: "Warm einpacken: dicker Mantel, Mütze, Handschuhe & Schal.",
+    cold: "Wetter für einen warmen Mantel.",
+    cool: "Eine Jacke ist eine gute Idee.",
+    mild_cool: "Ein Pullover oder eine leichte Jacke passt gut.",
+    mild: "Langarm ist angenehm.",
+    warm: "T-Shirt-Wetter.",
+    hot: "T-Shirt-und-Shorts-Wetter.",
+    extras: {
+      umbrella: "Später wird Regen erwartet – nimm einen Schirm mit.",
+      sunglasses: "Die UV-Strahlung ist hoch – Sonnenbrille empfohlen.",
+    },
   },
 
   recommendation: {
@@ -79,27 +103,34 @@ export default {
       high: "Gegen {time} wird starker Regen erwartet ({probability}% Wahrscheinlichkeit). Plane nasse Bedingungen und mögliche Verzögerungen ein.",
     },
     uv: {
+      low: "Heute niedrige UV-Strahlung (Index {uvIndex}). Kein besonderer Sonnenschutz nötig.",
       moderate: "Heute moderate UV-Strahlung (Index {uvIndex}). Sonnencreme ist bei längerem Aufenthalt im Freien sinnvoll.",
       high: "Heute hohe UV-Strahlung (Index {uvIndex}). Trage Sonnencreme, Sonnenbrille und einen Hut im Freien.",
       very_high: "Heute sehr hohe UV-Strahlung (Index {uvIndex}). Meide die Mittagssonne und schütze dich stark.",
       extreme: "Heute extreme UV-Strahlung (Index {uvIndex}). Meide direkte Sonne während der Spitzenzeiten; Sonnenschutz ist unverzichtbar.",
     },
-    wind_chill: {
-      low: "Durch den Wind fühlt es sich kühler an als die Lufttemperatur. Eine leichte Jacke hilft.",
-      moderate: "Der Wind lässt {temperature} deutlich kälter wirken. Zieh dich in Schichten warm an.",
-      high: "Starker Windchill-Effekt. Bedecke exponierte Haut und trage warme, winddichte Kleidung in Schichten.",
+    cold: {
+      moderate: "Es sind {temperature} und fühlt sich kalt an. Eine warme Jacke ist eine gute Idee.",
+      high: "Es sind {temperature} – richtig kalt draußen. Zieh dich in warmen Schichten an, bevor du rausgehst.",
+      extreme: "Es sind {temperature} – gefährlich kalt. Bedecke exponierte Haut und beschränke die Zeit im Freien, wenn möglich.",
+      windNote: " Der Wind lässt es noch kälter wirken.",
     },
-    heat_hydration: {
-      low: "Es ist warm draußen. Nimm etwas Wasser mit, wenn du länger unterwegs bist.",
-      moderate: "Es ist heute ziemlich heiß. Trinke ausreichend und mache Pausen im Schatten, wenn möglich.",
-      high: "Heute sehr hohe Temperaturen. Trinke regelmäßig Wasser, vermeide anstrengende Aktivitäten im Freien und bleibe im Schatten.",
+    heat: {
+      low: "Es sind {temperature}. Nimm etwas Wasser mit, wenn du länger unterwegs bist.",
+      moderate: "Es sind {temperature} – ziemlich heiß. Trinke ausreichend und mache Pausen im Schatten, wenn möglich.",
+      high: "Es sind {temperature} – sehr heiß. Trinke regelmäßig Wasser, vermeide anstrengende Aktivitäten im Freien und bleibe im Schatten.",
+      extreme: "Es sind {temperature} – gefährlich heiß. Vermeide Aktivitäten im Freien während der Spitzenzeiten und trinke ausreichend.",
     },
     bestWindow: "Gegen {time} scheint der angenehmste Zeitraum für draußen zu sein.",
     empty: {
-      feelsLike: "Nichts Besonderes – die Bedingungen fühlen sich gerade recht typisch an.",
-      wear: "Momentan ist kein besonderer Sonnenschutz nötig.",
+      feelsLike: "Angenehme {temperature} gerade – nichts Besonderes vorzubereiten.",
       beforeYouGo: "Heute wird kein Regen erwartet und es gibt keine besonderen Hinweise für draußen.",
     },
+  },
+
+  daily: {
+    showHourly: "Stündliche Vorhersage für {day} anzeigen",
+    hideHourly: "Stündliche Vorhersage für {day} ausblenden",
   },
 
   units: {

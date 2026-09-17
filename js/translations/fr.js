@@ -66,10 +66,34 @@ export default {
   sections: {
     howItFeels: "Ce que l'on ressent",
     whatToWear: "Comment s'habiller",
+    uvIndex: "Indice UV",
     beforeYouGo: "Avant de sortir",
     hourlyForecast: "Prévisions horaires",
     dailyForecast: "Prévisions sur 7 jours",
+    dailyForecastHint: "Touchez un jour pour voir ses prévisions horaires.",
     bestWindow: "Meilleur moment pour sortir aujourd'hui",
+  },
+
+  uvCategory: {
+    low: "Faible",
+    moderate: "Modéré",
+    high: "Élevé",
+    very_high: "Très élevé",
+    extreme: "Extrême",
+  },
+
+  clothing: {
+    extreme_cold: "Couvrez-vous bien : manteau chaud, bonnet, gants et écharpe.",
+    cold: "Temps à manteau chaud.",
+    cool: "Une veste est une bonne idée.",
+    mild_cool: "Un pull ou une veste légère convient bien.",
+    mild: "Les manches longues sont agréables.",
+    warm: "Temps à t-shirt.",
+    hot: "Temps à t-shirt et short.",
+    extras: {
+      umbrella: "De la pluie est probable plus tard — prenez un parapluie.",
+      sunglasses: "L'indice UV est élevé — lunettes de soleil recommandées.",
+    },
   },
 
   recommendation: {
@@ -79,27 +103,34 @@ export default {
       high: "De fortes pluies sont attendues vers {time} ({probability} % de probabilité). Prévoyez des conditions humides et d'éventuels retards.",
     },
     uv: {
+      low: "Indice UV faible aujourd'hui ({uvIndex}). Aucune protection solaire particulière n'est nécessaire.",
       moderate: "Indice UV modéré aujourd'hui ({uvIndex}). De la crème solaire est conseillée en cas d'exposition prolongée.",
       high: "Indice UV élevé aujourd'hui ({uvIndex}). Portez crème solaire, lunettes de soleil et un chapeau si vous sortez.",
       very_high: "Indice UV très élevé aujourd'hui ({uvIndex}). Évitez le soleil de midi et protégez-vous fortement.",
       extreme: "Indice UV extrême aujourd'hui ({uvIndex}). Évitez le soleil direct aux heures de pointe ; la protection solaire est indispensable.",
     },
-    wind_chill: {
-      low: "Le vent donne une sensation plus fraîche que la température de l'air. Une veste légère devrait suffire.",
-      moderate: "Le vent rend les {temperature} nettement plus froids. Habillez-vous en plusieurs couches.",
-      high: "Fort effet de refroidissement éolien. Couvrez la peau exposée et portez des couches chaudes et coupe-vent.",
+    cold: {
+      moderate: "Il fait {temperature} et ça semble froid. Une veste chaude est une bonne idée.",
+      high: "Il fait {temperature} — vraiment froid dehors. Habillez-vous chaudement en plusieurs couches avant de sortir.",
+      extreme: "Il fait {temperature} — dangereusement froid. Couvrez la peau exposée et limitez le temps passé dehors si possible.",
+      windNote: " Le vent accentue encore la sensation de froid.",
     },
-    heat_hydration: {
-      low: "Il fait chaud dehors. Gardez de l'eau sur vous si vous sortez un moment.",
-      moderate: "Il fait assez chaud aujourd'hui. Hydratez-vous bien et faites des pauses à l'ombre si possible.",
-      high: "Températures très élevées aujourd'hui. Buvez de l'eau régulièrement, évitez les efforts intenses en extérieur et restez à l'ombre.",
+    heat: {
+      low: "Il fait {temperature}. Gardez de l'eau sur vous si vous sortez un moment.",
+      moderate: "Il fait {temperature} — assez chaud. Hydratez-vous bien et faites des pauses à l'ombre si possible.",
+      high: "Il fait {temperature} — très chaud. Buvez de l'eau régulièrement, évitez les efforts intenses en extérieur et restez à l'ombre.",
+      extreme: "Il fait {temperature} — dangereusement chaud. Évitez toute activité extérieure aux heures de pointe et hydratez-vous bien.",
     },
     bestWindow: "Vers {time} semble être le moment le plus agréable pour sortir aujourd'hui.",
     empty: {
-      feelsLike: "Rien de particulier à signaler — les conditions sont plutôt habituelles en ce moment.",
-      wear: "Aucune protection solaire particulière n'est nécessaire pour le moment.",
+      feelsLike: "Une température agréable de {temperature} en ce moment — rien de particulier à prévoir.",
       beforeYouGo: "Aucune pluie n'est attendue et aucune consigne particulière pour sortir aujourd'hui.",
     },
+  },
+
+  daily: {
+    showHourly: "Afficher les prévisions horaires pour {day}",
+    hideHourly: "Masquer les prévisions horaires pour {day}",
   },
 
   units: {
