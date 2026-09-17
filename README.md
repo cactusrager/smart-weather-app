@@ -128,6 +128,7 @@ smart-weather/
 │   ├── geolocation.js      Geolocation API wrapper
 │   ├── geocoding.js        forward search + reverse lookup
 │   ├── recommendations.js  language-neutral rules engine
+│   ├── temperature-icons.js icon/color lookup for What to Wear's thermometer
 │   ├── i18n.js             language resolution, switching, Intl helpers
 │   ├── storage.js          typed localStorage helpers
 │   ├── ui.js               DOM rendering only, no business logic

@@ -177,21 +177,27 @@
         </div>
       </section>
 
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-md-4">
-          <section class="info-card p-3" aria-labelledby="how-it-feels-heading">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-4">
+        <div class="col">
+          <section class="info-card p-3 h-100" aria-labelledby="how-it-feels-heading">
             <h2 class="card-title" id="how-it-feels-heading" data-i18n-text="sections.howItFeels">How It Feels</h2>
             <ul class="list-unstyled mb-0" id="how-it-feels-list"></ul>
           </section>
         </div>
-        <div class="col-12 col-md-4">
-          <section class="info-card p-3" aria-labelledby="what-to-wear-heading">
+        <div class="col">
+          <section class="info-card p-3 h-100" aria-labelledby="what-to-wear-heading">
             <h2 class="card-title" id="what-to-wear-heading" data-i18n-text="sections.whatToWear">What to Wear</h2>
-            <ul class="list-unstyled mb-0" id="what-to-wear-list"></ul>
+            <div id="what-to-wear-content" class="clothing-card"></div>
           </section>
         </div>
-        <div class="col-12 col-md-4">
-          <section class="info-card p-3" aria-labelledby="before-you-go-heading">
+        <div class="col">
+          <section class="info-card p-3 h-100" aria-labelledby="uv-index-heading">
+            <h2 class="card-title" id="uv-index-heading" data-i18n-text="sections.uvIndex">UV Index</h2>
+            <div id="uv-index-content" class="uv-card"></div>
+          </section>
+        </div>
+        <div class="col">
+          <section class="info-card p-3 h-100" aria-labelledby="before-you-go-heading">
             <h2 class="card-title" id="before-you-go-heading" data-i18n-text="sections.beforeYouGo">Before You Go</h2>
             <ul class="list-unstyled mb-0" id="before-you-go-list"></ul>
           </section>
@@ -203,13 +209,9 @@
         <span id="best-window-text"></span>
       </section>
 
-      <section class="mb-4" aria-labelledby="hourly-heading">
-        <h2 class="h6" id="hourly-heading" data-i18n-text="sections.hourlyForecast">Hourly forecast</h2>
-        <div class="hourly-scroll" id="hourly-list" tabindex="0" role="group" aria-labelledby="hourly-heading"></div>
-      </section>
-
       <section aria-labelledby="daily-heading">
         <h2 class="h6" id="daily-heading" data-i18n-text="sections.dailyForecast">7-day forecast</h2>
+        <p class="form-text mt-n1 mb-2" data-i18n-text="sections.dailyForecastHint">Tap a day to see its hourly forecast.</p>
         <div id="daily-list"></div>
       </section>
 

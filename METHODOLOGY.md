@@ -26,23 +26,56 @@ the rest of the app only ever works with those, never the raw numeric code.
 
 These are simplified, general-purpose bands — not a formal wind-chill or
 heat-index formula — meant to give a quick, sensible nudge, not a precise
-meteorological calculation.
+meteorological calculation. Both are driven by "feels like" (apparent)
+temperature, not raw air temperature.
 
-- **Wind chill guidance** triggers when wind is at least 15 km/h *and* the
-  "feels like" temperature is 10°C or below. Severity increases as the feels-like
-  temperature drops (10°C → moderate around 5°C and below → high around -5°C
-  and below).
-- **Heat/hydration guidance** triggers at 28°C and above, increasing in
-  severity at 32°C and 36°C.
+- **Cold guidance** is based on temperature alone, so it fires correctly even
+  in still, windless air — a calm -40°C is dangerous whether or not the wind
+  is blowing. Bands: 2°C and below → not shown (mild enough); 2 to -10°C →
+  moderate; -10 to -25°C → high; -25°C and below → extreme. If wind is also
+  at least 20 km/h, the severity is bumped up one tier, since moving air does
+  make a given temperature feel worse.
+- **Heat guidance** bands: 26°C and above → low; 32°C → moderate; 36°C →
+  high; 40°C and above → extreme.
 
-## What to Wear: UV guidance
+Whichever of the two applies (a location is never both hot and cold at once)
+shows in the How It Feels card; if neither applies, the card shows today's
+actual temperature with a reassuring "nothing special to prepare for" note
+rather than a generic message, so a comfortable 18°C reads differently from
+a comfortable 22°C.
 
-UV guidance follows the same exposure categories as the World Health
+## What to Wear: clothing guidance
+
+A color-coded thermometer icon + one-line clothing label, chosen from seven
+tiers by "feels like" temperature — this is a direct, visual answer to
+"what should I put on," independent of the more detailed health guidance
+above. The icon's fill level (empty → full) and color (blue → red) both
+track the same tier, so cold and hot are readable at a glance even without
+the text.
+
+| Feels like | Tier |
+|---|---|
+| ≤ -15°C | Heavy coat, hat, gloves & scarf |
+| -15 to -5°C | Warm coat |
+| -5 to 5°C | Jacket |
+| 5 to 12°C | Sweater or light jacket |
+| 12 to 18°C | Long sleeves |
+| 18 to 24°C | T-shirt |
+| > 24°C | T-shirt and shorts |
+
+Two extra badges can appear alongside the pictogram: an umbrella, if today's
+peak precipitation probability is 30% or higher; and sunglasses, if today's
+peak UV index is 6 or higher (the "high" band and up — see below).
+
+## UV Index
+
+Its own section, always showing today's peak UV index and category — not
+just a warning that appears at high values — following the World Health
 Organization's Global Solar UV Index public-health convention:
 
 | UV Index | Category |
 |---|---|
-| 0–2 | Low (no guidance shown — nothing notable) |
+| 0–2 | Low |
 | 3–5 | Moderate |
 | 6–7 | High |
 | 8–10 | Very High |
