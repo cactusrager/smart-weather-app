@@ -25,24 +25,44 @@ const RAIN_PROBABILITY_BANDS = [
   { min: 75, max: 101, severity: "high" },
 ];
 
-// Cold + wind guidance is triggered off "feels like" temperature, in °C,
-// when wind is making it feel noticeably colder than the air temperature
-// alone. Thresholds are simplified general-purpose bands, not a formal
-// wind-chill index formula.
-const WIND_CHILL_MIN_WIND_KMH = 15;
-const WIND_CHILL_BANDS = [
-  { max: -5, severity: "high" },
-  { max: 5, severity: "moderate" },
+// "Feels like" (apparent temperature) bands, in °C, for cold guidance. These
+// trigger on temperature alone — Yakutsk in still, windless -45°C air is
+// dangerously cold whether or not the wind is blowing, so cold guidance must
+// never require wind. Wind is only used afterwards to *bump* the severity up
+// one notch, because moving air does make a given temperature feel worse.
+// Simplified general-purpose bands, not a formal wind-chill formula.
+const COLD_BANDS = [
+  { max: -25, severity: "extreme" },
+  { max: -10, severity: "high" },
+  { max: 2, severity: "moderate" },
   { max: 10, severity: "low" },
 ];
+const COLD_WIND_BUMP_KMH = 20; // wind at/above this bumps cold severity up one tier
 
-// Heat + hydration guidance, in °C air temperature. Simplified general-purpose
-// bands, not a formal heat-index formula.
+// "Feels like" bands, in °C, for heat/hydration guidance. Simplified
+// general-purpose bands, not a formal heat-index formula.
 const HEAT_BANDS = [
+  { min: 40, severity: "extreme" },
   { min: 36, severity: "high" },
   { min: 32, severity: "moderate" },
-  { min: 28, severity: "low" },
+  { min: 26, severity: "low" },
 ];
+
+// What-to-wear tiers, in °C "feels like" temperature. Each tier is a single
+// clothing pictogram (see js/clothing-icons.js) plus a short translated
+// label — this is the direct, visual answer to "what should I put on",
+// separate from the more detailed cold/heat health guidance above.
+const CLOTHING_TIERS = [
+  { max: -15, tier: "extreme_cold" },
+  { max: -5, tier: "cold" },
+  { max: 5, tier: "cool" },
+  { max: 12, tier: "mild_cool" },
+  { max: 18, tier: "mild" },
+  { max: 24, tier: "warm" },
+  { max: Infinity, tier: "hot" },
+];
+
+const SEVERITY_ORDER = ["low", "moderate", "high", "extreme"];
 
 const CELSIUS_PER_FAHRENHEIT = 5 / 9;
 const KMH_PER_MPH = 1.60934;
@@ -57,6 +77,12 @@ function toKmh(speed, units) {
 
 function bandFor(bands, value, key = "max") {
   return bands.find((band) => (key === "max" ? value <= band.max : value >= band.min));
+}
+
+function bumpSeverity(severity, steps) {
+  const index = SEVERITY_ORDER.indexOf(severity);
+  const bumped = Math.min(index + steps, SEVERITY_ORDER.length - 1);
+  return SEVERITY_ORDER[bumped];
 }
 
 function buildRainRecommendation(hourly) {
@@ -85,6 +111,11 @@ function buildRainRecommendation(hourly) {
   };
 }
 
+/**
+ * The UV card is always shown (it's its own section now, not a conditional
+ * warning), so this always returns an object — including at low UV, where
+ * the severity is simply "low" and the UI shows a reassuring message.
+ */
 function buildUvRecommendation(daily) {
   const today = daily[0];
   if (!today || today.uvIndexMax == null) return null;
@@ -94,7 +125,6 @@ function buildUvRecommendation(daily) {
   // down to a displayed "5" should never be labelled "high").
   const uvIndex = Math.round(today.uvIndexMax);
   const band = bandFor(UV_BANDS, uvIndex);
-  if (band.severity === "low") return null; // Nothing worth flagging at low UV.
 
   return {
     type: "uv",
@@ -103,32 +133,57 @@ function buildUvRecommendation(daily) {
   };
 }
 
-function buildWindChillRecommendation(current, units) {
+function buildColdRecommendation(current, units) {
   const feelsLikeC = toCelsius(current.feelsLike, units);
+  const band = bandFor(COLD_BANDS, feelsLikeC);
+  if (!band || band.severity === "low") return null;
+
   const windKmh = toKmh(current.windSpeed, units);
-
-  if (windKmh < WIND_CHILL_MIN_WIND_KMH) return null;
-
-  const band = bandFor(WIND_CHILL_BANDS, feelsLikeC);
-  if (!band) return null;
+  const windy = windKmh >= COLD_WIND_BUMP_KMH;
 
   return {
-    type: "wind_chill",
-    severity: band.severity,
-    temperature: current.temperature,
-    windSpeed: current.windSpeed,
+    type: "cold",
+    severity: windy ? bumpSeverity(band.severity, 1) : band.severity,
+    temperature: current.feelsLike,
+    windy,
   };
 }
 
-function buildHeatHydrationRecommendation(current, units) {
-  const tempC = toCelsius(current.temperature, units);
-  const band = HEAT_BANDS.find((b) => tempC >= b.min);
+function buildHeatRecommendation(current, units) {
+  const feelsLikeC = toCelsius(current.feelsLike, units);
+  const band = HEAT_BANDS.find((b) => feelsLikeC >= b.min);
   if (!band) return null;
 
   return {
-    type: "heat_hydration",
+    type: "heat",
     severity: band.severity,
-    temperature: current.temperature,
+    temperature: current.feelsLike,
+  };
+}
+
+/**
+ * Always returns a clothing tier — "what to wear" should never be blank.
+ * `extras` flags simple add-ons (umbrella, sun protection) layered on top of
+ * the base tier, driven by today's rain/UV outlook rather than the tier itself.
+ */
+function buildClothingRecommendation(current, today, units) {
+  const feelsLikeC = toCelsius(current.feelsLike, units);
+  const { tier } = CLOTHING_TIERS.find((band) => feelsLikeC <= band.max);
+
+  const extras = [];
+  if (today && today.precipitationProbabilityMax >= RAIN_PROBABILITY_BANDS[0].min) {
+    extras.push("umbrella");
+  }
+  if (today && today.uvIndexMax >= UV_BANDS[1].max + 1) {
+    // Above the "moderate" band's ceiling, i.e. high UV or more.
+    extras.push("sunglasses");
+  }
+
+  return {
+    type: "clothing",
+    tier,
+    extras,
+    temperature: current.feelsLike,
   };
 }
 
@@ -173,23 +228,27 @@ function buildBestWindow(hourly, units) {
  *
  * Returns:
  * {
- *   feelsLike: [...],   // wind_chill / heat_hydration recommendations
- *   wear: [...],        // uv recommendation (clothing/sun protection angle)
+ *   feelsLike: [...],   // cold / heat health guidance (0 or 1 item)
+ *   wear: [...],        // clothing tier pictogram (always 1 item)
+ *   uv: {...} | null,   // today's UV index, always shown when data exists
  *   beforeYouGo: [...], // rain recommendation + best window
  * }
  */
 export function buildRecommendations(weatherData, units) {
   const { current, hourly, daily } = weatherData;
+  const today = daily[0];
 
-  const windChill = buildWindChillRecommendation(current, units);
-  const heat = buildHeatHydrationRecommendation(current, units);
+  const cold = buildColdRecommendation(current, units);
+  const heat = buildHeatRecommendation(current, units);
+  const clothing = buildClothingRecommendation(current, today, units);
   const uv = buildUvRecommendation(daily);
   const rain = buildRainRecommendation(hourly);
   const bestWindow = buildBestWindow(hourly, units);
 
   return {
-    feelsLike: [windChill, heat].filter(Boolean),
-    wear: [uv].filter(Boolean),
+    feelsLike: [cold, heat].filter(Boolean),
+    wear: [clothing],
+    uv,
     beforeYouGo: [rain, bestWindow].filter(Boolean),
   };
 }

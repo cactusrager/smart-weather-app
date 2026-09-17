@@ -109,13 +109,40 @@ export function applyDocumentLanguageMetadata() {
 }
 
 // ---------- Intl-backed formatting helpers ----------
-// All dates/times respect the forecast location's own timezone (passed in as
-// `timeZone`), not the visitor's browser timezone, per the app's locked-in
-// i18n decisions.
+//
+// Open-Meteo (requested with timezone=auto) already gives us every date/time
+// string as plain local wall-clock time *at the forecast location* — e.g.
+// "2026-09-17T14:00" means 2pm there, with no UTC offset written down.
+// JavaScript's Date parser does NOT treat that as "local time at some named
+// zone": a date-only string parses as UTC midnight, while a date+time string
+// without an offset parses as local time *in the visitor's own browser*.
+// Passing either straight into `new Date()` and then asking Intl to convert
+// it into the forecast location's timeZone would silently shift it by
+// whatever the offset difference between the visitor and that location is.
+//
+// So instead: parse the wall-clock numbers directly out of the string, and
+// anchor them to UTC ourselves. Formatting that anchored instant with
+// timeZone: "UTC" then reproduces exactly the numbers we parsed, and we
+// still get full Intl benefits (translated weekday/month names, the
+// locale's preferred hour cycle) for free. This function never performs a
+// real timezone conversion — the string is already the time we want to show.
+function parseLocalParts(isoString) {
+  const [datePart, timePart] = isoString.split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute] = (timePart || "0:0").split(":").map(Number);
+  return { year, month, day, hour, minute };
+}
+
+function anchorToUtc(isoString) {
+  const { year, month, day, hour, minute } = parseLocalParts(isoString);
+  return new Date(Date.UTC(year, month - 1, day, hour, minute));
+}
 
 export function formatTemperature(value, units) {
   const unitKey = units === "imperial" ? "fahrenheit" : "celsius";
-  const rounded = Math.round(value);
+  // Math.round(-0.3) is -0, and Intl.NumberFormat dutifully prints that as
+  // "-0" — technically correct, but reads as a mistake. Normalize it away.
+  const rounded = Math.round(value) || 0;
   return `${new Intl.NumberFormat(getLocale()).format(rounded)}${t(`units.${unitKey}`)}`;
 }
 
@@ -131,39 +158,41 @@ export function formatPercent(value) {
   );
 }
 
-export function formatHour(isoString, timeZone) {
+export function formatHour(isoString) {
   return new Intl.DateTimeFormat(getLocale(), {
     hour: "numeric",
     minute: "2-digit",
-    timeZone,
-  }).format(new Date(isoString));
+    timeZone: "UTC",
+  }).format(anchorToUtc(isoString));
 }
 
-export function formatWeekday(isoDateString, timeZone) {
-  return new Intl.DateTimeFormat(getLocale(), { weekday: "short", timeZone }).format(
-    new Date(isoDateString)
+export function formatWeekday(isoDateString) {
+  return new Intl.DateTimeFormat(getLocale(), { weekday: "short", timeZone: "UTC" }).format(
+    anchorToUtc(isoDateString)
   );
 }
 
-export function formatShortDate(isoDateString, timeZone) {
-  return new Intl.DateTimeFormat(getLocale(), { month: "short", day: "numeric", timeZone }).format(
-    new Date(isoDateString)
+export function formatShortDate(isoDateString) {
+  return new Intl.DateTimeFormat(getLocale(), { month: "short", day: "numeric", timeZone: "UTC" }).format(
+    anchorToUtc(isoDateString)
   );
 }
 
-/** "today" / "tomorrow" / a weekday name, using Intl.RelativeTimeFormat where possible. */
-export function formatRelativeDay(isoDateString, timeZone) {
-  const target = new Date(isoDateString);
-  const now = new Date();
-
-  const todayLabel = new Intl.DateTimeFormat("en-CA", { timeZone }).format(now); // YYYY-MM-DD, stable to diff
-  const targetLabel = new Intl.DateTimeFormat("en-CA", { timeZone }).format(target);
-  const dayDiff = Math.round((Date.parse(targetLabel) - Date.parse(todayLabel)) / 86_400_000);
+/**
+ * "today" / "tomorrow" / a weekday name, using Intl.RelativeTimeFormat where
+ * possible. `todayDateString` should be the forecast location's own idea of
+ * "today" — i.e. weather.daily[0].date — not the browser's clock, so this
+ * never needs a timezone conversion either.
+ */
+export function formatRelativeDay(isoDateString, todayDateString) {
+  const dayDiff = Math.round(
+    (anchorToUtc(isoDateString) - anchorToUtc(todayDateString)) / 86_400_000
+  );
 
   if (dayDiff === 0 || dayDiff === 1) {
     const rtf = new Intl.RelativeTimeFormat(getLocale(), { numeric: "auto" });
     return rtf.format(dayDiff, "day");
   }
 
-  return formatWeekday(isoDateString, timeZone);
+  return formatWeekday(isoDateString);
 }
