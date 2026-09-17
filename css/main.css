@@ -152,57 +152,241 @@ a {
 .recommendation-icon.severity-high,
 .recommendation-icon.severity-extreme { color: var(--color-danger); }
 
-/* ---------- Hourly timeline ---------- */
-.hourly-scroll {
+/* ---------- What to Wear ---------- */
+.clothing-card {
   display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  padding-block: 0.25rem 0.75rem;
-  scroll-snap-type: x proximity;
-}
-
-.hourly-item {
-  scroll-snap-align: start;
-  flex: 0 0 auto;
-  width: 4.5rem;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  color: var(--color-text);
+  gap: 0.35rem;
 }
 
-.hourly-item .hourly-time {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+.clothing-icon {
+  font-size: 3rem;
+  line-height: 1;
 }
 
-.hourly-item .hourly-temp {
+.clothing-label {
   font-weight: 600;
 }
 
-/* ---------- Daily forecast ---------- */
-.daily-row {
-  display: grid;
-  grid-template-columns: 5.5rem 2rem 1fr auto;
+.clothing-extras {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.clothing-extra-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding-block: 0.5rem;
-  border-bottom: 1px solid var(--color-border);
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
 }
 
-.daily-row:last-child {
-  border-bottom: none;
+.clothing-temp {
+  color: var(--color-text-muted);
 }
 
-.daily-bar-track {
+/* ---------- UV Index gauge ---------- */
+.uv-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.uv-gauge-number {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.uv-gauge-category {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.uv-gauge-track {
+  width: 100%;
+  height: 0.5rem;
   background-color: var(--color-border);
   border-radius: 999px;
-  height: 0.35rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.uv-gauge-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ---------- 7-day forecast ---------- */
+.daily-card {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--color-card-shadow);
   overflow: hidden;
 }
 
-.daily-bar-fill {
-  background-color: var(--color-primary);
-  height: 100%;
+.daily-row {
+  display: grid;
+  grid-template-columns: 4.5rem 1.75rem auto 1fr 1.25rem;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.daily-card .daily-row:last-child {
+  border-bottom: none;
+}
+
+.daily-row:hover,
+.daily-row-expanded {
+  background-color: var(--color-bg);
+}
+
+.daily-row-weekday {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.daily-row-date {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.daily-row-icon {
+  font-size: 1.25rem;
+  justify-self: center;
+}
+
+.daily-precip-chip {
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  white-space: nowrap;
+  min-width: 3rem;
+}
+
+.daily-row-range {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.daily-row-low {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.daily-row-high {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* A single gradient (cool -> warm) spans the whole track; the two mask
+   elements hide everything outside this day's min-max slice, so each row
+   shows just its own window onto one continuous, temperature-colored scale
+   — the min/max numbers at each end make that slice unambiguous. */
+.daily-temp-track {
+  position: relative;
+  height: 0.4rem;
   border-radius: 999px;
+  background-image: linear-gradient(to right, #4dabf7, #ffd43b, #ff6b35);
+  overflow: hidden;
+}
+
+.daily-temp-track-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: var(--color-bg-elevated);
+}
+
+.daily-temp-track-mask:first-child {
+  left: 0;
+}
+
+.daily-temp-track-mask:last-child {
+  right: 0;
+}
+
+.daily-row-chevron {
+  color: var(--color-text-muted);
+  justify-self: end;
+}
+
+.daily-detail {
+  padding: 0.75rem 1rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+}
+
+.daily-card > .daily-detail:last-child {
+  border-bottom: none;
+}
+
+.hourly-chart {
+  height: 4rem;
+}
+
+.hourly-chart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hourly-chart-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.hourly-chart-area {
+  fill: var(--color-primary);
+  opacity: 0.12;
+  stroke: none;
+}
+
+.hourly-chart-ticks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.hourly-chart-tick {
+  flex: 0 0 auto;
+  text-align: center;
+  min-width: 2.75rem;
+}
+
+.hourly-chart-tick-time {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.hourly-chart-tick-temp {
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 /* ---------- Best window callout ---------- */
